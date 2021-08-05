@@ -1,0 +1,38 @@
+version: '3'
+services:
+
+  analise:
+    image: 'zupacademy/analise-financeira'
+    ports:
+      - 9999:9999
+    environment:
+      SERVER_PORT: 9999
+
+  contas:
+    image: 'zupacademy/contas'
+    ports:
+      - 8888:8888
+    environment:
+      SERVER_PORT: 8888
+
+  transacoes:
+      image: 'zupacademy/transacoes'
+      ports:
+        - 7777:7777
+      environment:
+        SERVER_PORT: 7777
+
+  postgres:
+    image: 'postgres:alpine'
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: propostadb
+      POSTGRES_HOST: postgres
+
+volumes:
+  postgres-volume:
