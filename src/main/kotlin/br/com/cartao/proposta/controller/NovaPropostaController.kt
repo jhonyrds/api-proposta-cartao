@@ -20,9 +20,11 @@ class NovaPropostaController(val propostaRepository: PropostaRepository) {
     @PostMapping
     fun cadastra(@RequestBody @Valid request: NovaPropostaRequest): ResponseEntity<Any> {
 
-        val proposta = request.toModel()
+        val proposta = request.toModel(propostaRepository)
+            ?: return ResponseEntity.unprocessableEntity()
+                .body("Proposta para o documento: ${request.documento} já cadastrada!")
 
-        propostaRepository.save(proposta)
+        propostaRepository.save(proposta!!)
 
         val uri = ServletUriComponentsBuilder
             .fromCurrentRequestUri()

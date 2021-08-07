@@ -1,6 +1,7 @@
 package br.com.cartao.proposta.request
 
 import br.com.cartao.proposta.model.Proposta
+import br.com.cartao.proposta.repository.PropostaRepository
 import br.com.cartao.proposta.shared.CPFOUCNPJ
 import java.math.BigDecimal
 import javax.validation.constraints.Email
@@ -14,8 +15,12 @@ data class NovaPropostaRequest(
     @field:NotBlank val nome: String,
     @field:NotBlank val endereco: String,
     @field:NotNull @field:Positive val salario: BigDecimal
-){
-    fun toModel(): Proposta {
-        return Proposta(documento, email, nome, endereco, salario)
+) {
+    fun toModel(propostaRepository: PropostaRepository): Proposta? {
+        val possivelDocumento = propostaRepository.findByDocumento(documento)
+        if (possivelDocumento.isEmpty) {
+            return Proposta(documento, email, nome, endereco, salario)
+        }
+        return null
     }
 }
