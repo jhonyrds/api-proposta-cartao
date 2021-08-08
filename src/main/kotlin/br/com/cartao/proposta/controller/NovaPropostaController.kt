@@ -24,7 +24,7 @@ class NovaPropostaController(val propostaRepository: PropostaRepository) {
             ?: return ResponseEntity.unprocessableEntity()
                 .body("Proposta para o documento: ${request.documento} já cadastrada!")
 
-        propostaRepository.save(proposta!!)
+        propostaRepository.save(proposta)
 
         val uri = ServletUriComponentsBuilder
             .fromCurrentRequestUri()
