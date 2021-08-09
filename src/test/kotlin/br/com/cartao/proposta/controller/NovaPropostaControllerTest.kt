@@ -1,6 +1,7 @@
 package br.com.cartao.proposta.controller
 
 import br.com.cartao.proposta.model.Proposta
+import br.com.cartao.proposta.model.StatusProposta
 import br.com.cartao.proposta.repository.PropostaRepository
 import br.com.cartao.proposta.request.NovaPropostaRequest
 import org.junit.Assert.assertEquals
@@ -8,7 +9,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
@@ -30,8 +30,8 @@ internal class NovaPropostaControllerTest {
     @BeforeEach
     fun setup() {
         mockMvc = MockMvcBuilders
-            .standaloneSetup(controller)
-            .build()
+                .standaloneSetup(controller)
+                .build()
     }
 
     @Test
@@ -85,22 +85,23 @@ internal class NovaPropostaControllerTest {
 
     private fun gerarRequest(): NovaPropostaRequest {
         return NovaPropostaRequest(
-            "12345678910",
-            "teste@teste.com",
-            "Jhony Rodrigues",
-            "Rua 123",
-            "1000.00".toBigDecimal()
+                "12345678910",
+                "teste@teste.com",
+                "Jhony Rodrigues",
+                "Rua 123",
+                "1000.00".toBigDecimal()
         )
     }
 
     private fun gerarProposta(): Proposta {
         val request = gerarRequest()
         return Proposta(
-            documento = request.documento,
-            email = request.email,
-            nome = request.nome,
-            endereco = request.endereco,
-            salario = request.salario
+                documento = request.documento,
+                email = request.email,
+                nome = request.nome,
+                endereco = request.endereco,
+                salario = request.salario,
+                statusProposta = StatusProposta.ELEGIVEL
         )
     }
 }
