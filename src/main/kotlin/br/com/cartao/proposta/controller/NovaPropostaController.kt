@@ -19,9 +19,9 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/proposta")
-class NovaPropostaController(val propostaRepository: PropostaRepository, val analiseClient: AnalisePropostaClient) {
+class NovaPropostaController(private val propostaRepository: PropostaRepository, private val analiseClient: AnalisePropostaClient) {
 
-    val logger = LoggerFactory.getLogger(NovaPropostaController::class.java)
+    private val logger = LoggerFactory.getLogger(NovaPropostaController::class.java)
 
     @PostMapping
     @Transactional
@@ -33,9 +33,9 @@ class NovaPropostaController(val propostaRepository: PropostaRepository, val ana
 
         try {
             val analise = analiseClient.analise(AnaliseDePropostaRequest(proposta.documento, proposta.nome, proposta.propostaId))
-            proposta.statusProposta = converte(analise.resultadoSolicitacao)
-        } catch (feignExcepcion: FeignException) {
-            proposta.statusProposta = StatusProposta.NAO_ELEGIVEL
+            proposta.adicionaStatus(converte(analise.resultadoSolicitacao))
+        } catch (feignException: FeignException) {
+            proposta.adicionaStatus(StatusProposta.NAO_ELEGIVEL)
         }
 
         propostaRepository.save(proposta)

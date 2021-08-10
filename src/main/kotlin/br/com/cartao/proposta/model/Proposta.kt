@@ -14,9 +14,15 @@ class Proposta(
         @field:NotBlank @field:Email val email: String,
         @field:NotBlank val nome: String,
         @field:NotBlank val endereco: String,
-        @field:NotNull @field:Positive val salario: BigDecimal,
-        @field:Enumerated(EnumType.STRING) var statusProposta: StatusProposta? = null
+        @field:NotNull @field:Positive val salario: BigDecimal
 ) {
     @Id
     val propostaId: String = UUID.randomUUID().toString()
+
+    @field:Enumerated(EnumType.STRING) lateinit var statusProposta: StatusProposta
+    private set
+
+    fun adicionaStatus(statusProposta: StatusProposta) {
+        this.statusProposta = statusProposta
+    }
 }

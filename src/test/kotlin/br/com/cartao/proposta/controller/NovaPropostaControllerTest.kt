@@ -101,7 +101,6 @@ internal class NovaPropostaControllerTest {
                 nome = request.nome,
                 endereco = request.endereco,
                 salario = request.salario,
-                statusProposta = StatusProposta.ELEGIVEL
         )
     }
 }
