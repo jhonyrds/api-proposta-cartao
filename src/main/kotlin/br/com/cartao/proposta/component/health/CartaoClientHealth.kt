@@ -1,5 +1,4 @@
-package br.com.cartao.proposta.component
-
+package br.com.cartao.proposta.component.health
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.actuate.health.Health
@@ -9,14 +8,14 @@ import java.net.Socket
 import java.net.URL
 
 @Component
-class ClientHelth : HealthIndicator {
+class CartaoClientHealth : HealthIndicator {
 
-    @Value("\${analise.proposta}/solicitacao")
+    @Value("\${analise.cartao}")
     private lateinit var url: String
 
     override fun health(): Health {
         try {
-            Socket(URL(url).host, 9999)
+            Socket(URL(url).host, 8888)
         } catch (e: Exception) {
             return Health.down().withDetail("Erro", e.message).build()
         }

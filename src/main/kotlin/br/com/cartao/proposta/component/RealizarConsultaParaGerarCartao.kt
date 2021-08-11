@@ -12,9 +12,8 @@ import org.springframework.stereotype.Component
 @Component
 class RealizarConsultaParaGerarCartao(private val cartaoClient: AnaliseCartaoClient, private val cartaoRepository: CartaoRepository) : AcaoAposGerarProposta {
     override fun executar(proposta: Proposta) {
-        val consulta = cartaoClient.gerar(AnaliseDePropostaRequest(proposta.documento, proposta.nome, proposta.propostaId))
-
         if (proposta.statusProposta == StatusProposta.ELEGIVEL) {
+            val consulta = cartaoClient.gerar(AnaliseDePropostaRequest(proposta.documento, proposta.nome, proposta.propostaId))
             val cartao = Cartao(consulta.id, consulta.emitidoEm, consulta.titular, consulta.limite, consulta.vencimento.dia, consulta.idProposta)
             cartaoRepository.save(cartao)
         }
