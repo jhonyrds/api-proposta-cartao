@@ -20,7 +20,7 @@ class NovaPropostaController(private val propostaRepository: PropostaRepository,
                              private val executorDeAcoes: ExecutorDeAcoes
 ) {
 
-    private val logger = LoggerFactory.getLogger(NovaPropostaController::class.java)
+    private val LOGGER = LoggerFactory.getLogger(NovaPropostaController::class.java)
 
     @PostMapping
     fun cadastra(@RequestBody @Valid request: NovaPropostaRequest): ResponseEntity<Any> {
@@ -40,7 +40,7 @@ class NovaPropostaController(private val propostaRepository: PropostaRepository,
                 .path("/${proposta.propostaId}")
                 .buildAndExpand().toUri()
 
-        logger.info("Gerando nova proposta: $request, propostaId: ${proposta.propostaId}")
+        LOGGER.info("Gerando nova proposta: propostaId: ${proposta.propostaId}")
 
         return ResponseEntity.created(uri).build()
     }

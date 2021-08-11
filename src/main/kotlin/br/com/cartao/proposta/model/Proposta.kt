@@ -19,10 +19,19 @@ class Proposta(
     @Id
     val propostaId: String = UUID.randomUUID().toString()
 
-    @field:Enumerated(EnumType.STRING) lateinit var statusProposta: StatusProposta
-    private set
+    @field:Enumerated(EnumType.STRING)
+    var statusProposta: StatusProposta = StatusProposta.EM_ANALISE
+        private set
+
+    @field:OneToOne
+    var cartaoId: Cartao? = null
+        private set
 
     fun adicionaStatus(statusProposta: StatusProposta) {
         this.statusProposta = statusProposta
+    }
+
+    fun adicionaCartaoId(numero: Cartao) {
+        this.cartaoId = numero
     }
 }

@@ -1,6 +1,7 @@
 package br.com.cartao.proposta.model
 
 enum class StatusProposta {
+    EM_ANALISE,
     NAO_ELEGIVEL,
     ELEGIVEL
 }

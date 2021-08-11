@@ -7,16 +7,21 @@ import br.com.cartao.proposta.model.converte
 import br.com.cartao.proposta.request.AnaliseDePropostaRequest
 import br.com.cartao.proposta.servicos.AnalisePropostaClient
 import feign.FeignException
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class RealizarAnaliseDaProposta(val analiseClient: AnalisePropostaClient) : AcaoAposGerarProposta {
+class RealizarAnaliseDaProposta(private val analiseClient: AnalisePropostaClient) : AcaoAposGerarProposta {
+
+    private val LOGGER = LoggerFactory.getLogger(RealizarAnaliseDaProposta::class.java)
+
     override fun executar(proposta: Proposta) {
         try {
             val analise = analiseClient.analise(AnaliseDePropostaRequest(proposta.documento, proposta.nome, proposta.propostaId))
             proposta.adicionaStatus(converte(analise.resultadoSolicitacao))
-        } catch (feignException: FeignException) {
-            proposta.adicionaStatus(StatusProposta.NAO_ELEGIVEL)
+            LOGGER.info("Adicionando status da proposta: ${proposta.propostaId}")
+        } catch (e: FeignException) {
+            LOGGER.error("$e, serviço indisponível no momento, aguardando a próxima sincronização!")
         }
     }
 }

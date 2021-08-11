@@ -12,5 +12,4 @@ class Cartao(
         val titular: String,
         val limite: BigDecimal,
         val vencimento: String,
-        val propostaId: String
 )
