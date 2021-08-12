@@ -21,7 +21,9 @@ class RealizarAnaliseDaProposta(private val analiseClient: AnalisePropostaClient
             proposta.adicionaStatus(converte(analise.resultadoSolicitacao))
             LOGGER.info("Adicionando status da proposta: ${proposta.propostaId}")
         } catch (e: FeignException) {
-            LOGGER.error("$e, serviço indisponível no momento, aguardando a próxima sincronização!")
+            LOGGER.error("Proposta ${proposta.propostaId} com restrição: ${e.status()}")
+        }catch (exception: Exception){
+            LOGGER.error("$exception, serviço indisponível no momento, aguardando a próxima sincronização!")
         }
     }
 }

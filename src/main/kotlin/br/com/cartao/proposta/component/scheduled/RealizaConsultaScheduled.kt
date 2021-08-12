@@ -29,7 +29,11 @@ class RealizaConsultaScheduled(private val repository: PropostaRepository, priva
                     repository.save(proposta)
                     LOGGER.info("Adicionando o status da proposta: ${proposta.propostaId}")
                 } catch (e: FeignException) {
-                    LOGGER.error("$e, serviço indisponível no momento, aguardando a próxima sincronização!")
+                    proposta.adicionaStatus(StatusProposta.NAO_ELEGIVEL)
+                    repository.save(proposta)
+                    LOGGER.error("Proposta ${proposta.propostaId} com restrição: ${e.status()}")
+                } catch (exception: Exception) {
+                    LOGGER.error("$exception, serviço indisponível no momento, aguardando a próxima sincronização!")
                 }
             }
         }

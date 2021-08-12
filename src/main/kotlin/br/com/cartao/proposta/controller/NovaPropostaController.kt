@@ -3,13 +3,11 @@ package br.com.cartao.proposta.controller
 import br.com.cartao.proposta.model.AcaoAposGerarProposta
 import br.com.cartao.proposta.repository.PropostaRepository
 import br.com.cartao.proposta.request.NovaPropostaRequest
+import br.com.cartao.proposta.response.DadosDaPropostaResponse
 import br.com.cartao.proposta.shared.ExecutorDeAcoes
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import javax.validation.Valid
 
@@ -43,5 +41,21 @@ class NovaPropostaController(private val propostaRepository: PropostaRepository,
         LOGGER.info("Gerando nova proposta: propostaId: ${proposta.propostaId}")
 
         return ResponseEntity.created(uri).build()
+    }
+
+    @GetMapping("/{propostaId}")
+    fun consulta(@PathVariable propostaId: String): ResponseEntity<DadosDaPropostaResponse> {
+
+        val proposta = propostaRepository.findById(propostaId)
+
+        return when {
+            proposta.isEmpty -> {
+                ResponseEntity.notFound().build()
+            }
+            else -> {
+                LOGGER.info("Consultando os dados da proposta: $propostaId")
+                ResponseEntity.ok().body(DadosDaPropostaResponse(proposta.get()))
+            }
+        }
     }
 }
