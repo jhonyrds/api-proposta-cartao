@@ -1,20 +1,20 @@
 package br.com.cartao.proposta.controller
 
 import br.com.cartao.proposta.model.Proposta
-import br.com.cartao.proposta.model.StatusProposta
 import br.com.cartao.proposta.repository.PropostaRepository
 import br.com.cartao.proposta.request.NovaPropostaRequest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import br.com.cartao.proposta.response.DadosDaPropostaResponse
+import org.junit.Assert.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import java.util.*
 
 @SpringBootTest
 internal class NovaPropostaControllerTest {
@@ -75,8 +75,32 @@ internal class NovaPropostaControllerTest {
         assertEquals(response.statusCode, HttpStatus.UNPROCESSABLE_ENTITY)
     }
 
+    @Test
+    internal fun `deve buscar informaçoes do status da proposta`() {
+
+        //cenário
+        val propostaId = UUID.randomUUID().toString()
+
+        val proposta: Optional<Proposta> = mockRepository.findById(propostaId)
+
+        //ação
+        `when`(controller.consulta(propostaId)).thenReturn(createResponseEntityOk())
+
+        `when`(mockRepository.findById(propostaId)).thenReturn(proposta)
+
+        val response = controller.consulta(propostaId)
+
+        //verificação
+        assertNotNull(response)
+        assertEquals(response.statusCode, HttpStatus.OK)
+    }
+
     private fun createResponseEntitySuccess(): ResponseEntity<Any> {
         return ResponseEntity<Any>("body", HttpStatus.CREATED)
+    }
+
+    private fun createResponseEntityOk(): ResponseEntity<DadosDaPropostaResponse> {
+        return ResponseEntity<DadosDaPropostaResponse>(HttpStatus.OK)
     }
 
     private fun statusUnprocessableEntity(): ResponseEntity<Any> {

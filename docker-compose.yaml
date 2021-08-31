@@ -15,12 +15,12 @@ services:
     environment:
       SERVER_PORT: 8888
 
-  transacoes:
-      image: 'zupacademy/transacoes'
-      ports:
-        - 7777:7777
-      environment:
-        SERVER_PORT: 7777
+#  transacoes:
+#      image: 'zupacademy/transacoes'
+#      ports:
+#        - 7777:7777
+#      environment:
+#        SERVER_PORT: 7777
 
   postgres:
     image: 'postgres:alpine'
