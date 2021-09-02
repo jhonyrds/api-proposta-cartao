@@ -16,7 +16,7 @@ class RealizaConsultaScheduled(private val repository: PropostaRepository, priva
 
     private val LOGGER = LoggerFactory.getLogger(RealizaConsultaScheduled::class.java)
 
-    @Scheduled(initialDelay = 10000, fixedDelay = 10000)
+    @Scheduled(initialDelay = 600000, fixedDelay = 600000)
     fun realizarConsulta() {
 
         val propostas: List<Proposta> = repository.findAll()

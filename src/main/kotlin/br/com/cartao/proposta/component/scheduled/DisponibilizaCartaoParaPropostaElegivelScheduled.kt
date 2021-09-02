@@ -17,7 +17,7 @@ class DisponibilizaCartaoParaPropostaElegivelScheduled(private val propostaRepos
 
     private val LOGGER = LoggerFactory.getLogger(DisponibilizaCartaoParaPropostaElegivelScheduled::class.java)
 
-    @Scheduled(initialDelay = 10000, fixedRate = 10000)
+    @Scheduled(initialDelay = 600000, fixedRate = 600000)
     fun disponibilizaCartao() {
 
         val propostas: List<Proposta> = propostaRepository.findByStatusPropostaEqualsAndCartaoIdNull(StatusProposta.ELEGIVEL);
