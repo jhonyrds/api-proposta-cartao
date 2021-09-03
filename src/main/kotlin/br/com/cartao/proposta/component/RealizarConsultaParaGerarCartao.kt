@@ -6,12 +6,12 @@ import br.com.cartao.proposta.model.Proposta
 import br.com.cartao.proposta.model.StatusProposta
 import br.com.cartao.proposta.repository.CartaoRepository
 import br.com.cartao.proposta.request.AnaliseDePropostaRequest
-import br.com.cartao.proposta.servicos.AnaliseCartaoClient
+import br.com.cartao.proposta.servicos.CartaoClient
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class RealizarConsultaParaGerarCartao(private val cartaoClient: AnaliseCartaoClient, private val cartaoRepository: CartaoRepository) : AcaoAposGerarProposta {
+class RealizarConsultaParaGerarCartao(private val cartaoClient: CartaoClient, private val cartaoRepository: CartaoRepository) : AcaoAposGerarProposta {
 
     private val LOGGER = LoggerFactory.getLogger(RealizarConsultaParaGerarCartao::class.java)
 

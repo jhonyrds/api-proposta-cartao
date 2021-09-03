@@ -2,45 +2,47 @@ package br.com.cartao.proposta.controller
 
 import br.com.cartao.proposta.model.BloqueiosCartao
 import br.com.cartao.proposta.repository.CartaoRepository
+import br.com.cartao.proposta.request.BloqueioCartaoRequest
 import br.com.cartao.proposta.response.BloqueioCartaoResponse
+import br.com.cartao.proposta.servicos.CartaoClient
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("api/cartao")
 class BloqueioCartaoController(
         private val request: HttpServletRequest,
-        private val cartaoRepository: CartaoRepository
+        private val cartaoRepository: CartaoRepository,
+        private val cartaoClient: CartaoClient
 ) {
 
     private val LOGGER = LoggerFactory.getLogger(BloqueioCartaoController::class.java)
 
     @PostMapping("{cartaoId}/bloqueio")
-    fun bloqueia(@PathVariable cartaoId: String): ResponseEntity<BloqueioCartaoResponse> {
+    fun bloqueia(@PathVariable cartaoId: String, @RequestBody bloqueioRequest: BloqueioCartaoRequest): ResponseEntity<BloqueioCartaoResponse> {
 
         val cartao = cartaoRepository.findById(cartaoId)
 
         if (cartao.isPresent) {
-            return if (cartao.get().bloqueios.size == 0) {
-                cartao.get().bloqueios(BloqueiosCartao(request.remoteAddr, request.getHeader("User-Agent")))
+            try {
+                val response = cartaoClient.bloquear(cartaoId, bloqueioRequest)
 
-                cartaoRepository.save(cartao.get())
+                if (response.statusCode == HttpStatus.OK) {
+                    cartao.get().bloqueios(BloqueiosCartao(request.remoteAddr, request.getHeader("User-Agent")))
 
-                LOGGER.info("Adicionando bloqueio no cartãoId: $cartaoId")
+                    cartaoRepository.save(cartao.get())
 
-                ResponseEntity.ok(BloqueioCartaoResponse())
-            } else {
-                ResponseEntity.unprocessableEntity().body(BloqueioCartaoResponse())
+                    LOGGER.info("Adicionando bloqueio no cartãoId: $cartaoId")
+
+                    return ResponseEntity.ok(BloqueioCartaoResponse())
+                }
+            } catch (e: Exception) {
+                return ResponseEntity.unprocessableEntity().body(BloqueioCartaoResponse())
             }
         }
         return ResponseEntity.notFound().build()
     }
 }
-
-
-

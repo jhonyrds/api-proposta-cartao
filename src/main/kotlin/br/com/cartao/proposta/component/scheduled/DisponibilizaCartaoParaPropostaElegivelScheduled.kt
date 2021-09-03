@@ -6,14 +6,14 @@ import br.com.cartao.proposta.model.StatusProposta
 import br.com.cartao.proposta.repository.CartaoRepository
 import br.com.cartao.proposta.repository.PropostaRepository
 import br.com.cartao.proposta.request.AnaliseDePropostaRequest
-import br.com.cartao.proposta.servicos.AnaliseCartaoClient
+import br.com.cartao.proposta.servicos.CartaoClient
 import feign.FeignException
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
-class DisponibilizaCartaoParaPropostaElegivelScheduled(private val propostaRepository: PropostaRepository, private val cartaoRepository: CartaoRepository, private val analiseCartao: AnaliseCartaoClient) {
+class DisponibilizaCartaoParaPropostaElegivelScheduled(private val propostaRepository: PropostaRepository, private val cartaoRepository: CartaoRepository, private val analiseCartao: CartaoClient) {
 
     private val LOGGER = LoggerFactory.getLogger(DisponibilizaCartaoParaPropostaElegivelScheduled::class.java)
 
